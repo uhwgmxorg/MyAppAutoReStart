@@ -41,7 +41,7 @@ namespace MyAppAutoReStart
         /// </summary>
         void ApplicationReStart()
         {
-            Thread ThisTask = Thread.CurrentThread;
+            EventWaitHandle Wh = new AutoResetEvent(false);
             MessageBoxResult res = MessageBoxResult.None;
             string ErrorMessage = string.Format("The application has encountered a problem and needs to be restarted!");
 
@@ -50,11 +50,11 @@ namespace MyAppAutoReStart
             {
                 Thread.CurrentThread.Name = "RestartThread";
                 res = MessageBox.Show(ErrorMessage, "...", MessageBoxButton.YesNo);
-                ThisTask.Resume();
+                Wh.Set();
             });
             thread.Start();
 
-            ThisTask.Suspend();
+            Wh.WaitOne();
             if (res == MessageBoxResult.No) Environment.Exit(-1);
 
             System.Diagnostics.Process.Start(Application.ResourceAssembly.Location);
