@@ -4,6 +4,7 @@ using System.Configuration;
 using System.Data;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 
@@ -40,8 +41,22 @@ namespace MyAppAutoReStart
         /// </summary>
         void ApplicationReStart()
         {
+            Thread ThisTask = Thread.CurrentThread;
+            MessageBoxResult res = MessageBoxResult.None;
             string ErrorMessage = string.Format("The application has encountered a problem and needs to be restarted!");
-            MessageBox.Show(ErrorMessage, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+
+            var thread = new Thread(
+            () =>
+            {
+                Thread.CurrentThread.Name = "RestartThread";
+                res = MessageBox.Show(ErrorMessage, "...", MessageBoxButton.YesNo);
+                ThisTask.Resume();
+            });
+            thread.Start();
+
+            ThisTask.Suspend();
+            if (res == MessageBoxResult.No) Environment.Exit(-1);
+
             System.Diagnostics.Process.Start(Application.ResourceAssembly.Location);
             System.Windows.Application.Current.Shutdown();
         }

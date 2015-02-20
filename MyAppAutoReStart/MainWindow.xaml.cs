@@ -4,6 +4,10 @@
 /*   How to restart an application, by itself.                                */
 /*                                                                            */
 /*   07.04.2014 0.0.0.0 uhwgmxorg Start                                       */
+/*   20.04.2014 1.1.0.0 uhwgmxorg Improve the restart mechanism               */
+/*                                and put the Message Box in a separate       */
+/*                                and given the user the choice whether he    */
+/*                                wants to restart or not.                    */
 /*                                                                            */
 /******************************************************************************/
 using System;
